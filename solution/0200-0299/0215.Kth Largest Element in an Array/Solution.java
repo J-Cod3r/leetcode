@@ -1,32 +1,25 @@
 class Solution {
     public int findKthLargest(int[] nums, int k) {
-        return findKthLargest(nums, 0, nums.length - 1, nums.length - k);
+        return find(nums, 0, nums.length - 1, k - 1);
     }
     
-    public int findKthLargest(int[] nums, int l, int r, int k) {
-        int i = l, j = r;
-        int temp = nums[i];
+    private int find(int[] nums, int left, int right, int k) {
+        int i = left;
+        int j = right;
+        int index = nums[left];
         while (i < j) {
-            while (i < j && nums[j] >= temp) {
-                j--;
-            }
+            while (i < j && index >= nums[j]) j--;
             if (i < j) {
                 nums[i++] = nums[j];
             }
-            while (i < j && nums[i] <= temp) {
-                i++;
-            }
+            while (i < j && index <= nums[i]) i++;
             if (i < j) {
                 nums[j--] = nums[i];
             }
         }
-        nums[i] = temp;
-        if (i == k) {
-            return nums[i];
-        } else if (i < k) {
-            return findKthLargest(nums, i + 1, r, k);
-        } else {
-            return findKthLargest(nums, l, i - 1, k);
-        }
+        nums[i] = index;
+        if (i > k) return find (nums, left, i - 1, k);
+        else if (i < k) return find(nums, i + 1, right, k);
+        else return nums[i];
     }
 }
